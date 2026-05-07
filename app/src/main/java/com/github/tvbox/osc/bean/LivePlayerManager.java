@@ -1,5 +1,6 @@
 package com.github.tvbox.osc.bean;
 
+import android.os.Build;
 import androidx.annotation.NonNull;
 
 import com.github.tvbox.osc.util.HawkConfig;
@@ -80,7 +81,7 @@ public class LivePlayerManager {
                         playerTypeIndex = 2;
                     break;
                 case 2:
-                    playerTypeIndex = 3;
+                    playerTypeIndex = Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN ? 0 : 3;
                     break;
             }
         } catch (JSONException e) {
@@ -116,6 +117,8 @@ public class LivePlayerManager {
                     playerConfig.put("ijk", "软解码");
                     break;
                 case 3:
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN)
+                        return;
                     playerConfig.put("pl", 2);
                     playerConfig.put("ijk", "软解码");
                     break;

@@ -4,6 +4,7 @@ import static com.github.tvbox.osc.util.RegexUtils.getPattern;
 
 import android.app.Activity;
 import android.net.Uri;
+import android.os.Build;
 import android.text.TextUtils;
 import android.util.Base64;
 
@@ -739,7 +740,7 @@ public class ApiConfig {
         ArrayList<ArrayList<String>> itemsArrayList = new ArrayList<>();
         ArrayList<String> sourceItems = new ArrayList<>();
         ArrayList<String> scaleItems = new ArrayList<>(Arrays.asList("默认", "16:9", "4:3", "填充", "原始", "裁剪"));
-        ArrayList<String> playerDecoderItems = new ArrayList<>(Arrays.asList("系统", "ijk硬解", "ijk软解", "exo"));
+        ArrayList<String> playerDecoderItems = new ArrayList<>(Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN ? Arrays.asList("系统", "ijk硬解", "ijk软解", "exo") : Arrays.asList("系统", "ijk硬解", "ijk软解"));
         ArrayList<String> timeoutItems = new ArrayList<>(Arrays.asList("5s", "10s", "15s", "20s", "25s", "30s"));
         ArrayList<String> personalSettingItems = new ArrayList<>(Arrays.asList("显示时间", "显示网速", "换台反转", "跨选分类"));
         ArrayList<String> yumItems = new ArrayList<>();

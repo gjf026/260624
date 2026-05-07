@@ -1,7 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.github.tvbox.osc">
-
+    <!-- Override minSdkVersion for packages which required SDK 16, 
+     and SDK 15 (net.butterflytv.rtmp_client)  -->
+    <uses-sdk
+        android:minSdkVersion="14"
+        tools:overrideLibrary="
+        org.chromium.net,
+        org.xwalk.core,
+        com.kingja.loadsir,
+        xyz.doikki.videocontroller,
+        com.google.android.exoplayer2.core,
+        com.google.android.exoplayer2.ui,
+        com.google.android.exoplayer2.ext.okhttp,
+        com.google.android.exoplayer2.source.dash,
+        com.google.android.exoplayer2.source.hls,
+        com.google.android.exoplayer2.source.rtsp,
+        com.google.android.exoplayer2.ext.rtmp,
+        com.google.android.exoplayer2.extractor,
+        com.google.android.exoplayer2.common,
+        net.butterflytv.rtmp_client" />
     <uses-feature
         android:name="android.software.leanback"
         android:required="false" />

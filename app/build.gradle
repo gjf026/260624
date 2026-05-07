@@ -23,9 +23,14 @@ android {
 
     flavorDimensions "mode"
     productFlavors {
+        legacy {
+            dimension "mode"
+            minSdkVersion 14
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
         normal {
             dimension "mode"
-            minSdkVersion 16
+            minSdkVersion 14
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
         python {
@@ -64,7 +69,16 @@ android {
 
     applicationVariants.configureEach { variant ->
         variant.outputs.configureEach { output ->
-            def flavorNames = variant.productFlavors.collect { it.name == "normal" ? "java" : it.name }.join('-')
+            def flavorNames = variant.productFlavors.collect { flavor ->
+                switch (flavor.name) {
+                    case "legacy":
+                        return "java-legacy"
+                    case "normal":
+                        return "java"
+                    default:
+                        return flavor.name
+                }
+            }.join('-')
             // 构建自定义文件名
             def fileName = "TVBox_${variant.buildType.name}-${flavorNames}.apk"
             outputFileName = fileName
@@ -134,6 +148,7 @@ dependencies {
     implementation 'com.github.hedzr:android-file-chooser:v1.2.0-final'
     implementation 'commons-io:commons-io:2.11.0'
     implementation 'com.googlecode.juniversalchardet:juniversalchardet:1.0.3'
+    implementation 'org.conscrypt:conscrypt-android:2.2.1'
     //支持http3
     implementation ('com.google.net.cronet:cronet-okhttp:0.1.0')
 //    implementation 'com.google.android.gms:play-services-cronet:18.0.1'

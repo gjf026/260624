@@ -216,6 +216,9 @@
 -keep class com.google.net.cronet.**{*;}
 -keep class org.chromium.net.**{*;}
 
+# TLS
+-dontwarn com.android.org.conscrypt.SSLParametersImpl
+
 # Nano
 -keep class fi.iki.elonen.** { *; }
 

@@ -1,6 +1,7 @@
 package com.github.tvbox.osc.base;
 
 import android.app.Activity;
+import android.os.Build;
 import androidx.multidex.MultiDexApplication;
 
 import com.github.tvbox.osc.bean.VodInfo;
@@ -19,6 +20,10 @@ import com.kingja.loadsir.core.LoadSir;
 import com.orhanobut.hawk.Hawk;
 import com.p2p.P2PClass;
 import com.whl.quickjs.android.QuickJSLoader;
+
+import java.security.Security;
+import org.conscrypt.Conscrypt;
+
 import com.github.catvod.crawler.JsLoader;
 
 import me.jessyan.autosize.AutoSizeConfig;
@@ -41,6 +46,9 @@ public class App extends MultiDexApplication {
         super.onCreate();
         instance = this;
         initParams();
+        // Enable TLS v1.1-v1.3 for Android 4.0-9.0
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q)
+            Security.insertProviderAt(Conscrypt.newProvider(), 1);
         // OKGo
         OkGoHelper.init(); //台标获取
         EpgUtil.init();

@@ -5,8 +5,23 @@ plugins {
 android {
     compileSdkVersion 33
 
+    flavorDimensions "mode"
+    productFlavors {
+        legacy {
+            dimension "mode"
+            minSdkVersion 14
+        }
+        normal {
+            dimension "mode"
+            minSdkVersion 14
+        }
+        python {
+            dimension "mode"
+            minSdkVersion 19
+        }
+    }
+
     defaultConfig {
-        minSdkVersion 16
         targetSdkVersion 28
     }
 
@@ -20,7 +35,6 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-
         releaseSimon.initWith(release)
         releaseSimon {
         }

@@ -2,6 +2,7 @@ package com.github.tvbox.osc.util;
 
 import android.app.Activity;
 import android.content.Context;
+import android.os.Build;
 
 import com.github.tvbox.osc.api.ApiConfig;
 import com.github.tvbox.osc.bean.IJKCode;
@@ -70,7 +71,7 @@ public class PlayerHelper {
             } catch (Throwable th) {
                 th.printStackTrace();
             }
-        } else if (playerType == 2) {
+        } else if (playerType == 2 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             playerFactory = ExoMediaPlayerFactory.create();
         } else {
             playerFactory = AndroidMediaPlayerFactory.create();
@@ -116,7 +117,7 @@ public class PlayerHelper {
             } catch (Throwable th) {
                 th.printStackTrace();
             }
-        } else if (playType == 2) {
+        } else if (playType == 2 && Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN) {
             playerFactory = ExoMediaPlayerFactory.create();
         } else {
             playerFactory = AndroidMediaPlayerFactory.create();
@@ -186,7 +187,7 @@ public class PlayerHelper {
             HashMap<Integer, Boolean> playersExist = new HashMap<>();
             playersExist.put(0, true);
             playersExist.put(1, true);
-            playersExist.put(2, true);
+            playersExist.put(2, Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN);
             playersExist.put(10, MXPlayer.getPackageInfo() != null);
             playersExist.put(11, ReexPlayer.getPackageInfo() != null);
             playersExist.put(12, Kodi.getPackageInfo() != null);

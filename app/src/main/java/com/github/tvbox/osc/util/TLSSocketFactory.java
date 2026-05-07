@@ -1,24 +1,45 @@
 package com.github.tvbox.osc.util;
 
+import android.os.Build;
+
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.net.ssl.SSLSocket;
 import javax.net.ssl.SSLSocketFactory;
 
 public class TLSSocketFactory extends SSLSocketFactory {
-    private static final String[] TLS_SUPPORT_VERSION = {"TLSv1.1", "TLSv1.2"};
-
-    final SSLSocketFactory delegate;
+    private final SSLSocketFactory delegate;
+    private String TLS_VERSIONS[] = { "TLSv1.1", "TLSv1.2", "TLSv1.3" };
+    private String TLS_CIPHER_SUITES[] = null;
 
     public TLSSocketFactory(SSLSocketFactory base) {
         this.delegate = base;
+
+        if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
+            // Disable ECDSA cipher suites on Android 4.0.x, which do not support them.
+            // No way to set siguature schemes, so we have to disable TLS v1.3.
+
+            List<String> cipherSuites = new ArrayList<>();
+            for (String suite : delegate.getDefaultCipherSuites()) {
+                if (suite.toUpperCase().contains("RSA")) {
+                    cipherSuites.add(suite);
+                }
+            }
+            this.TLS_VERSIONS = new String[] { "TLSv1.1", "TLSv1.2" };
+            this.TLS_CIPHER_SUITES = cipherSuites.toArray(new String[cipherSuites.size()]);
+        }
     }
 
     @Override
     public String[] getDefaultCipherSuites() {
+        if (TLS_CIPHER_SUITES != null) {
+            return TLS_CIPHER_SUITES;
+        }
         return delegate.getDefaultCipherSuites();
     }
 
@@ -38,7 +59,8 @@ public class TLSSocketFactory extends SSLSocketFactory {
     }
 
     @Override
-    public Socket createSocket(String host, int port, InetAddress localHost, int localPort) throws IOException, UnknownHostException {
+    public Socket createSocket(String host, int port, InetAddress localHost, int localPort)
+            throws IOException, UnknownHostException {
         return patch(delegate.createSocket(host, port, localHost, localPort));
     }
 
@@ -48,13 +70,16 @@ public class TLSSocketFactory extends SSLSocketFactory {
     }
 
     @Override
-    public Socket createSocket(InetAddress address, int port, InetAddress localAddress, int localPort) throws IOException {
+    public Socket createSocket(InetAddress address, int port, InetAddress localAddress, int localPort)
+            throws IOException {
         return patch(delegate.createSocket(address, port, localAddress, localPort));
     }
 
     private Socket patch(Socket s) {
         if (s instanceof SSLSocket) {
-            ((SSLSocket) s).setEnabledProtocols(TLS_SUPPORT_VERSION);
+            SSLSocket sslSocket = (SSLSocket) s;
+            sslSocket.setEnabledProtocols(TLS_VERSIONS);
+            sslSocket.setEnabledCipherSuites(getDefaultCipherSuites());
         }
         return s;
     }
