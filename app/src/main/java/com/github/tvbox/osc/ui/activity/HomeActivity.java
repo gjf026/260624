@@ -293,7 +293,7 @@ public class HomeActivity extends BaseActivity {
                 }
                 initViewPager(absXml);
                 SourceBean home = ApiConfig.get().getHomeSourceBean();
-                if (home != null && home.getName() != null && !home.getName().isEmpty()) tvName.setText(home.getName());
+          //      if (home != null && home.getName() != null && !home.getName().isEmpty()) tvName.setText(home.getName());
                 tvName.clearAnimation();
             }
         });
